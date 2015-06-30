@@ -1,0 +1,6 @@
+[mysqld]
+wsrep_cluster_name                = {{cluster_name}} 
+wsrep_cluster_address             = "{{cluster_addr}}"
+wsrep_provider_options            = "base_host={{rep_addr}}"
+wsrep_node_address                = {{rep_addr}}
+wsrep_sst_auth                    = {{rep_user}}:{{rep_pass}}

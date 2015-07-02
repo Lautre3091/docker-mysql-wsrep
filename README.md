@@ -13,6 +13,7 @@ For the first node in a cluster you should tell it to bootstrap the cluster usin
 
     usage: entry [-h] [--cluster-name [CLUSTER_NAME]] [--rep-user [REP_USER]]
                  [--rep-pass [REP_PASS]] [--root-pass [ROOT_PASS]]
+                 [--mon-user [MON_USER]] [--mon-pass [MON_PASS]]
                  [--boot-strap-cluster]
                  rep_addr member_addr [member_addr ...]
 

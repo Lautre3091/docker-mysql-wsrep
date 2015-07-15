@@ -91,6 +91,12 @@ argparser.add_argument('--mon-pass','-M',
                        nargs='?',
                        help='The password for the MySQL monitor user, "clustercheckpassword"')
 
+argparser.add_argument('--max-connections','-C',
+                       action='store',
+                       type=int,
+                       nargs='?',
+                       help='The maximum number of open connections to MySQL, "256"')
+
 argparser.add_argument('--boot-strap-cluster','-b',
                        action='store_true',
                        help='Boot strap the cluster, run mysqld with --wsrep-new-cluster')
@@ -153,6 +159,11 @@ if root_pass is None:
    print "Warning! Default value of changeme2 being used for the MySQL root user password"
    root_pass ='changeme2'
 
+# If no value passed to max-connections then warn that default value will be used
+max_connections = args.max_connections
+if max_connections is None:
+   print "Warning! Default value of 256 being used for the maximum number of open connections for  MySQL"
+   max_connections ='256'
 
 ########################################################################################################################
 # Variables                                                                                                            #
@@ -272,7 +283,7 @@ template_list = {}
 # Templates go here
 ### wsrep.cnf ###
 template_name = 'wsrep.cnf'
-template_dict = { 'context' : { # Subsitutions to be performed
+template_dict = { 'context' : { # Substitutions to be performed
                                 'cluster_name' : args.cluster_name,
                                 'cluster_addr' : cluster_addr,
                                 'rep_addr'     : args.rep_addr,
@@ -280,6 +291,17 @@ template_dict = { 'context' : { # Subsitutions to be performed
                                 'rep_pass'     : args.rep_pass,
                               },
                   'path'    : '/etc/mysql/conf.d/wsrep.cnf',
+                  'user'    : 'root',
+                  'group'   : 'root',
+                  'mode'    : 0644 }
+template_list[template_name] = template_dict
+
+### my.cnf ###
+template_name = 'my.cnf'
+template_dict = { 'context' : { # Substitutions to be performed
+                                'max_connections' : args.max_connections,
+                              },
+                  'path'    : '/etc/mysql/my.cnf',
                   'user'    : 'root',
                   'group'   : 'root',
                   'mode'    : 0644 }

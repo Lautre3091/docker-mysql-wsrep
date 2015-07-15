@@ -93,10 +93,8 @@ RUN \
 VOLUME /var/lib/mysql
 
 # Templates
+COPY templates/my.cnf /mysql-templates/my.cnf
 COPY templates/wsrep.cnf /mysql-templates/wsrep.cnf
-
-# Copy the my.cnf file in config/
-COPY config/my.cnf /etc/mysql/my.cnf
 
 # Entry script
 COPY scripts/entry.py /usr/local/bin/entry

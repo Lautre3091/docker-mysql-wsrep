@@ -18,7 +18,7 @@ FROM ubuntu:14.04
 # usage: entry [-h] [--cluster-name [CLUSTER_NAME]] [--rep-user [REP_USER]]
 #              [--rep-pass [REP_PASS]] [--root-pass [ROOT_PASS]]
 #              [--mon-user [MON_USER]] [--mon-pass [MON_PASS]]
-#              [--boot-strap-cluster]
+#              [--max-connections [MAX_CONNECTIONS]] [--boot-strap-cluster]
 #              rep_addr member_addr [member_addr ...]
 
 # Run a docker container containing a MySQL wsrep Instance
@@ -44,6 +44,8 @@ FROM ubuntu:14.04
 #   --mon-pass [MON_PASS], -M [MON_PASS]
 #                         The password for the MySQL monitor user,
 #                         "clustercheckpassword"
+#   --max-connections [MAX_CONNECTIONS], -C [MAX_CONNECTIONS]
+#                         The maximum number of open connections to MySQL, "256"
 #   --boot-strap-cluster, -b
 #                         Boot strap the cluster, run mysqld with --wsrep-new-
 #                         cluster

@@ -75,7 +75,8 @@ RUN \
 # Install extra packages
 RUN \
     apt-key adv --keyserver keyserver.ubuntu.com --recv BC19DDBA && \
-    echo deb http://releases.galeracluster.com/ubuntu trusty main >> /etc/apt/sources.list && \
+    echo deb http://releases.galeracluster.com/mysql-wsrep-5.6/ubuntu trusty main >> /etc/apt/sources.list && \
+    echo deb http://releases.galeracluster.com/galera-3/ubuntu trusty main >> /etc/apt/sources.list && \
     apt-get update && \
     apt-get install -y python-software-properties python python-jinja2 python-ipy galera-3 galera-arbitrator-3 mysql-wsrep-5.6 rsync python2.7-mysqldb && \
     apt-get clean && \

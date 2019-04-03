@@ -66,6 +66,7 @@ LABEL Description="This image is used to stand up a MySQL wsrep instance." Versi
 
 # Set the mysql-wsrep version to be pinned
 ENV MSW_PKG_VRS 5.6.42-25.24-1trusty
+ENV TIMEZONE Etc/UTC
 
 # We want to set the uid number and gid number for mysql
 RUN \
@@ -84,7 +85,7 @@ RUN \
 
 # Set timezone
 RUN \
-    echo "Pacific/Auckland" > /etc/timezone && \
+    echo $TIMEZONE > /etc/timezone && \
     dpkg-reconfigure -f noninteractive tzdata
 
 # Remove pre-installed database and create templates directory for wsrep.cnf

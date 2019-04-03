@@ -54,7 +54,7 @@ FROM ubuntu:14.04
 # (to achieve software and hardware redundancy) in active-active configuration.  It is recommended you utilise Weave for this.
 
 # Information
-MAINTAINER Eric Duggan <eric.duggan@solnet.co.nz>
+MAINTAINER Gweltaz GESTIN <gestin.gweltaz@gmail.com>
 LABEL Description="This image is used to stand up a MySQL wsrep instance." Version="5.6.23"
 
 # Patch notes:

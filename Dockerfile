@@ -78,13 +78,13 @@ RUN \
     echo deb http://releases.galeracluster.com/mysql-wsrep-5.6.42-25.24/ubuntu trusty main >> /etc/apt/sources.list && \
     echo deb http://releases.galeracluster.com/galera-3/ubuntu trusty main >> /etc/apt/sources.list && \
     apt-get update && \
-    apt-get install -y python-software-properties python python-jinja2 python-ipy galera-3 galera-arbitrator-3 mysql-wsrep-5.6 rsync python2.7-mysqldb && \
+    apt-get install -y software-properties-common python python-jinja2 python-ipy galera-3 galera-arbitrator-3 mysql-wsrep-5.6 rsync python2.7-mysqldb && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # Set timezone
 RUN \
-    echo $TIMEZONE > /etc/timezone && \
+    echo "Etc/UTC" > /etc/timezone && \
     dpkg-reconfigure -f noninteractive tzdata
 
 # Remove pre-installed database and create templates directory for wsrep.cnf

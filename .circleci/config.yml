@@ -5,13 +5,6 @@ jobs:
     steps:
       - checkout
 
-      - run: |
-          docker login -u $DOCKER_USER -p $DOCKER_PASS
-
-      # build the application image
-      - run: |
-          cd 5.6.23
-          docker build -t lautre/docker-mysql-wsrep:5.6.23 .
-
-      # deploy the image
-      - run: docker push lautre/docker-mysql-wsrep:5.6.23
+      - run: docker login -u $DOCKER_USER -p $DOCKER_PASS
+      - run: docker build -t lautre/docker-mysql-wsrep:5.6 .
+      - run: docker push lautre/docker-mysql-wsrep:5.6

@@ -55,7 +55,7 @@ FROM ubuntu:14.04
 
 # Information
 MAINTAINER Gweltaz GESTIN <gestin.gweltaz@gmail.com>
-LABEL Description="This image is used to stand up a MySQL wsrep instance." Version="5.6.23"
+LABEL Description="This image is used to stand up a MySQL wsrep instance." Version="5.6.42-25.24"
 
 # Patch notes:
 # Version 5.6.23
@@ -65,7 +65,7 @@ LABEL Description="This image is used to stand up a MySQL wsrep instance." Versi
 #       - Give GRANT rights to root user and add monitor user and password
 
 # Set the mysql-wsrep version to be pinned
-ENV MSW_PKG_VRS 5.6.23-25.10-1trusty 
+ENV MSW_PKG_VRS 5.6.42-25.24-1trusty
 
 # We want to set the uid number and gid number for mysql
 RUN \
@@ -75,7 +75,7 @@ RUN \
 # Install extra packages
 RUN \
     apt-key adv --keyserver keyserver.ubuntu.com --recv BC19DDBA && \
-    echo deb http://releases.galeracluster.com/mysql-wsrep-5.6/ubuntu trusty main >> /etc/apt/sources.list && \
+    echo deb http://releases.galeracluster.com/mysql-wsrep-5.6.42-25.24/ubuntu trusty main >> /etc/apt/sources.list && \
     echo deb http://releases.galeracluster.com/galera-3/ubuntu trusty main >> /etc/apt/sources.list && \
     apt-get update && \
     apt-get install -y python-software-properties python python-jinja2 python-ipy galera-3 galera-arbitrator-3 mysql-wsrep-5.6 rsync python2.7-mysqldb && \

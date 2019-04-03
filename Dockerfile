@@ -94,7 +94,7 @@ RUN \
 
 RUN mkdir /usr/data
 
-RUN |
+RUN \
     chown -R mysql:mysql /var/lib/mysql && \
     chown -R mysql:mysql  /usr/data
 

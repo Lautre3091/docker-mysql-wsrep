@@ -1,13 +1,12 @@
 # MySQL wsrep Dockerfile
-# Solnet Solutions
-# Version: 5.6.23 (5.6:5.6.23-25.10-1trusty)
+# Version: 5.6.42 (5.6.42-25.24-1trusty)
 
 # Pull base image (Ubunu 14.04)
 FROM ubuntu:14.04
 
 # Build Instructions
 # When building use the following flags:
-#      --tag "solnetcloud/mysql-wsrep:5.6.23"
+#      --tag "lautre/mysql-wsrep:5.6.42"
 
 # Run Instructions:
 # Run a DOC/volume to preserve state of /var/lib/mysql

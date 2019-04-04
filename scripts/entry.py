@@ -8,7 +8,7 @@
 # Import required libaries
 import sys, os, pwd, grp  # OS Libraries
 import argparse  # Parse Arguments
-from subprocess import Popen, PIPE, STDOUT
+from subprocess import Popen, PIPE, STDOUT, call
 # Open up a process
 
 # Important required templating libarires
@@ -111,7 +111,7 @@ except SystemExit:
 # ARGUMENT VERIRIFCATION                                                                                               #
 # This is where you put any logic to verify the arguments, and failure messages                                        #
 ########################################################################################################################
-# 
+#
 # Check that rep_addr is a valid IP address
 if not isIP(args.rep_addr):
     print "The argument %s must be a valid IP address" % args.rep_addr
@@ -185,7 +185,7 @@ cluster_addr = "gcomm://" + ','.join(cluster_hosts)
 ########################################################################################################################
 # If ibdata1 does not exist under the mysql path then this is the first time the container has been run
 # so mysql_install_db needs to be run to initialize the DB using the volume mounted from a directory on the host
-# We also set up the replication DB user and the root DB user password 
+# We also set up the replication DB user and the root DB user password
 # Once run, this does not need to run again for the life of the container (assuming the DB data mount does not get blatted!)
 if not os.path.isfile(mysql_init_check_file):
     print "No existing databases found under %s" % mysql_path
@@ -199,12 +199,7 @@ if not os.path.isfile(mysql_init_check_file):
 
     print "Creating initial system tables for MySQL"
     # Initialize system tables
-    mysql_install = Popen(['/usr/bin/mysql_install_db'], stdout=PIPE, stderr=PIPE, shell=False)
-    output, err = mysql_install.communicate()
-    if err:
-        print err
-
-    print output
+    call(["/usr/bin/mysql_install_db"])
 
     uid = pwd.getpwnam(mysql_user).pw_uid
     gid = grp.getgrnam(mysql_group).gr_gid
@@ -217,24 +212,7 @@ if not os.path.isfile(mysql_init_check_file):
             fname = os.path.join(root, name)
             os.chown(fname, uid, gid)
 
-    mysql_start = Popen(["service", "mysql", "start"], stdout=PIPE, stderr=STDOUT, shell=False)
-    output, err = mysql_start.communicate()
-    if err:
-        print err
-        sys.exit(0)  # This should be a return 0 to prevent the container from restarting
-
-    print output
-
-    uid = pwd.getpwnam(mysql_user).pw_uid
-    gid = grp.getgrnam(mysql_group).gr_gid
-    # DB path
-    for root, dirs, files in os.walk(mysql_path):
-        for name in dirs:
-            dirname = os.path.join(root, name)
-            os.chown(dirname, uid, gid)
-        for name in files:
-            fname = os.path.join(root, name)
-            os.chown(fname, uid, gid)
+    call(["/etc/init.d/mysql", "start"])
 
     print "Creating replication and monitor DB users and setting password for root DB user"
     # Open database connection
@@ -283,13 +261,7 @@ if not os.path.isfile(mysql_init_check_file):
     db.close
 
     # Stop MySQL
-    mysql_stop = Popen(["service", "mysql", "stop"], stdout=PIPE, stderr=STDOUT, shell=False)
-    output, err = mysql_stop.communicate()
-    if err:
-        print err
-        sys.exit(0)  # This should be a return 0 to prevent the container from restarting
-
-    print output
+    call(["/etc/init.d/mysql", "stop"])
 
 ########################################################################################################################
 # TEMPLATES                                                                                                            #
@@ -434,7 +406,7 @@ if first_run is False:
     # Reopen stdout as unbuffered. This will mean log messages will appear as soon as they become avaliable.
     sys.stdout = os.fdopen(sys.stdout.fileno(), 'w', 0)
 
-child = Popen(child_path, stdout=PIPE, stderr=STDOUT, shell=False)
+child = Popen(child_path, stdout=PIPE, stderr=STDOUT, shell=True)
 
 # Output any log items to Docker
 for line in iter(child.stdout.readline, ''):

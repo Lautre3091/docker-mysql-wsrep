@@ -109,7 +109,5 @@ RUN chmod +x /usr/local/bin/entry
 # Expose 3306: MySQL
 EXPOSE 3306
 
-USER mysql
-
 # Define the default command as entrypoint
 ENTRYPOINT ["/usr/local/bin/entry"]

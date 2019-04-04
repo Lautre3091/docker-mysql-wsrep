@@ -387,21 +387,6 @@ for template_item in template_list:
 
 
 ########################################################################################################################
-# Fix permissons on /var/lib/mysql                                                                                     #
-########################################################################################################################
-uid = pwd.getpwnam(mysql_user).pw_uid
-gid = grp.getgrnam(mysql_group).gr_gid
-# DB path
-for root, dirs, files in os.walk(mysql_path):
-   for name in dirs:
-      dirname = os.path.join(root, name)
-      os.chown(dirname, uid, gid)
-   for name in files:
-      fname = os.path.join(root, name)
-      os.chown(fname, uid, gid)
-
-
-########################################################################################################################
 # SPAWN CHILD                                                                                                          #
 ########################################################################################################################
 # Spawn the child

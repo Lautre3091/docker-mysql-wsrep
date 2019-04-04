@@ -180,6 +180,19 @@ for i in range(len(cluster_hosts)):
 # Define value for wsrep_cluster_address in wsrep.cnf
 cluster_addr = "gcomm://"+','.join(cluster_hosts)
 
+########################################################################################################################
+# Fix permissons on /var/lib/mysql                                                                                     #
+########################################################################################################################
+uid = pwd.getpwnam(mysql_user).pw_uid
+gid = grp.getgrnam(mysql_group).gr_gid
+# DB path
+for root, dirs, files in os.walk(mysql_path):
+    for name in dirs:
+        dirname = os.path.join(root, name)
+        os.chown(dirname, uid, gid)
+    for name in files:
+        fname = os.path.join(root, name)
+        os.chown(fname, uid, gid)
 
 ########################################################################################################################
 # Initialize MySQL on first run                                                                                        #
@@ -394,11 +407,9 @@ gid = grp.getgrnam(mysql_group).gr_gid
 for root, dirs, files in os.walk(mysql_path):
    for name in dirs:
       dirname = os.path.join(root, name)
-      print "dirname " % dirname
       os.chown(dirname, uid, gid)
    for name in files:
       fname = os.path.join(root, name)
-      print "fname " % fname
       os.chown(fname, uid, gid)
 
 ########################################################################################################################

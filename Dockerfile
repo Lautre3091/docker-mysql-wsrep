@@ -94,10 +94,6 @@ RUN \
 
 RUN mkdir /usr/data
 
-RUN \
-    chown -R mysql:mysql /var/lib/mysql && \
-    chown -R mysql:mysql  /usr/data
-
 # Define mountable volumes.  We need the database data to be persistant so this should be mounted as a volume
 VOLUME /var/lib/mysql
 
@@ -112,6 +108,8 @@ RUN chmod +x /usr/local/bin/entry
 # Expose ports to other containers
 # Expose 3306: MySQL
 EXPOSE 3306
+
+USER mysql
 
 # Define the default command as entrypoint
 ENTRYPOINT ["/usr/local/bin/entry"]

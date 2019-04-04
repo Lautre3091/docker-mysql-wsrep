@@ -385,6 +385,21 @@ for template_item in template_list:
        print errormsg
        sys.exit(0) # This should be a return 0 to prevent the container from restarting
 
+########################################################################################################################
+# Fix permissons on /var/lib/mysql                                                                                     #
+########################################################################################################################
+uid = pwd.getpwnam(mysql_user).pw_uid
+gid = grp.getgrnam(mysql_group).gr_gid
+# DB path
+for root, dirs, files in os.walk(mysql_path):
+   for name in dirs:
+      dirname = os.path.join(root, name)
+      print "dirname " % dirname
+      os.chown(dirname, uid, gid)
+   for name in files:
+      fname = os.path.join(root, name)
+      print "fname " % fname
+      os.chown(fname, uid, gid)
 
 ########################################################################################################################
 # SPAWN CHILD                                                                                                          #
@@ -400,7 +415,7 @@ if first_run is False:
    # Reopen stdout as unbuffered. This will mean log messages will appear as soon as they become avaliable.
    sys.stdout = os.fdopen(sys.stdout.fileno(), 'w', 0)
 
-child = Popen(child_path, stdout = PIPE, stderr = STDOUT, shell = False) 
+child = Popen(child_path, stdout = STDOUT, stderr = STDOUT, shell = False)
 
 # Output any log items to Docker
 for line in iter(child.stdout.readline, ''):

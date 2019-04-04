@@ -181,27 +181,13 @@ for i in range(len(cluster_hosts)):
 cluster_addr = "gcomm://"+','.join(cluster_hosts)
 
 ########################################################################################################################
-# Fix permissons on /var/lib/mysql                                                                                     #
-########################################################################################################################
-uid = pwd.getpwnam(mysql_user).pw_uid
-gid = grp.getgrnam(mysql_group).gr_gid
-# DB path
-for root, dirs, files in os.walk(mysql_path):
-    for name in dirs:
-        dirname = os.path.join(root, name)
-        os.chown(dirname, uid, gid)
-    for name in files:
-        fname = os.path.join(root, name)
-        os.chown(fname, uid, gid)
-
-########################################################################################################################
 # Initialize MySQL on first run                                                                                        #
 ########################################################################################################################
 # If ibdata1 does not exist under the mysql path then this is the first time the container has been run
 # so mysql_install_db needs to be run to initialize the DB using the volume mounted from a directory on the host
 # We also set up the replication DB user and the root DB user password 
 # Once run, this does not need to run again for the life of the container (assuming the DB data mount does not get blatted!)
-if not os.path.isfile(mysql_init_check_file):
+if not os.path.isfile('/var/lib/mysql/ibdata1'):
    print "No existing databases found under %s" % mysql_path
    first_run = True
    # Flush anything on the buffer
@@ -218,6 +204,17 @@ if not os.path.isfile(mysql_init_check_file):
    # Ignore errors for install
 
    print output
+
+   uid = pwd.getpwnam(mysql_user).pw_uid
+   gid = grp.getgrnam(mysql_group).gr_gid
+   # DB path
+   for root, dirs, files in os.walk(mysql_path):
+        for name in dirs:
+            dirname = os.path.join(root, name)
+            os.chown(dirname, uid, gid)
+        for name in files:
+            fname = os.path.join(root, name)
+            os.chown(fname, uid, gid)
 
    # Start mysql
    mysql_start = Popen(["service", "mysql", "start"], stdout = PIPE, stderr = PIPE, shell = False)
@@ -426,7 +423,7 @@ if first_run is False:
    # Reopen stdout as unbuffered. This will mean log messages will appear as soon as they become avaliable.
    sys.stdout = os.fdopen(sys.stdout.fileno(), 'w', 0)
 
-child = Popen(child_path, stdout = STDOUT, stderr = STDOUT, shell = False)
+child = Popen(child_path, stdout = PIPE, stderr = STDOUT, shell = False)
 
 # Output any log items to Docker
 for line in iter(child.stdout.readline, ''):

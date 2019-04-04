@@ -92,7 +92,9 @@ RUN \
     rm -rf /var/lib/mysql/* && \
     mkdir -p /mysql-templates
 
-RUN mkdir /usr/data
+RUN \
+    mkdir /usr/data && \
+    chown -R mysql:mysql /usr/data
 
 # Define mountable volumes.  We need the database data to be persistant so this should be mounted as a volume
 VOLUME /var/lib/mysql

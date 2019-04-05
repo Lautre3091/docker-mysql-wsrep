@@ -84,7 +84,7 @@ RUN \
 
 # Set timezone
 RUN \
-    echo "Etc/UTC" > /etc/timezone && \
+    echo $TIMEZONE > /etc/timezone && \
     dpkg-reconfigure -f noninteractive tzdata
 
 # Remove pre-installed database and create templates directory for wsrep.cnf

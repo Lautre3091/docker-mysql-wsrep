@@ -398,7 +398,11 @@ for root, dirs, files in os.walk(mysql_path):
 # Spawn the child
 child_path = ['/usr/sbin/mysqld']
 if args.boot_strap_cluster is True:
+    print "bootstrap cluster"
     child_path.append('--wsrep-new-cluster')
+
+if args.boot_strap_cluster is False:
+    print "not bootstrap cluster"
 
 if first_run is False:
     # Flush anything on the buffer
